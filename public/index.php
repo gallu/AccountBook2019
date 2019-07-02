@@ -1,25 +1,13 @@
 <?php  // index.php
 
-define('BASEPATH', realpath(__DIR__ . '/../'));
-//var_dump(BASEPATH);
+// 初期処理
+require_once(__DIR__ . '/../Libs/init.php');
 
 //
-require_once(BASEPATH . '/vendor/autoload.php');
+$template_file_name = 'index.tiwg';
+$template_data = [];
 
-require_once(BASEPATH . '/Libs/Config.php');
-$conf = Config::getAll();
-//var_dump($conf);
-
-require_once(BASEPATH . '/Libs/DB.php');
-//var_dump(DB::getHandle());
-
-//
-$dir = $conf['view_front']['template_dir'];
-$loader = new \Twig\Loader\FilesystemLoader($dir);
-$twig = new \Twig\Environment($loader);
-//var_dump($twig);
-
-
-echo $twig->render('index.tiwg', []);
+// 終了処理
+require_once(BASEPATH . '/Libs/fin.php');
 
 
