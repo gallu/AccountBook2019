@@ -4,7 +4,7 @@
 require_once(__DIR__ . '/../Libs/init.php');
 
 //
-$template_file_name = 'index.tiwg';
+$template_file_name = 'index.twig';
 $template_data = [];
 
 // 終了処理
