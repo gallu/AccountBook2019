@@ -2,7 +2,11 @@
 /*
  * 初期処理
  */
+// セッションの開始
+ob_start();
+session_start();
 
+//
 define('BASEPATH', realpath(__DIR__ . '/../'));
 //var_dump(BASEPATH);
 
