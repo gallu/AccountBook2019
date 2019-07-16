@@ -1,7 +1,23 @@
-会員テーブル：１レコードが１人の会員情報
-	名前
-	email
-	パスワード
+-- 会員テーブル：１レコードが１人の会員情報
+CREATE TABLE users(
+  user_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'ユーザ名',
+  email VARBINARY(255) NOT NULL DEFAULT '' COMMENT 'emailアドレス',
+  pw VARBINARY(255) NOT NULL COMMENT 'パスワード',
+  PRIMARY KEY(user_id)
+)CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='会員テーブル';
+
+-- emailアクティベーションテーブル
+CREATE TABLE activation (
+  token VARBINARY(512) NOT NULL COMMENT 'アクセストークン',
+  user_id BIGINT UNSIGNED NOT NULL ,
+  email VARBINARY(255) NOT NULL COMMENT 'emailアドレス',
+  ttl DATETIME NOT NULL COMMENT '有効期間',
+  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
+  PRIMARY KEY(token)
+)CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='emailアクティベーション';
+
+
 
 出納帳テーブル：１レコードが「１枚の伝票の１行」を意味する
 	日付

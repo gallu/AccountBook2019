@@ -9,33 +9,33 @@ $data = [];
 foreach($params as $p) {
     $data[$p] = (string)@$_POST[$p];
 }
-var_dump($data);
+//var_dump($data);
 
 // validate
-$error_flg = false;
+$error_flg = [];
 // 必須チェック
 foreach(['email', 'pw', 'pw2'] as $p) {
     if ('' === $data[$p]) {
-        $error_flg = true;
+        $error_flg["error_must_{$p}"] = true;
     }
 }
 // emailのvalidate
 if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-    $error_flg = true;
+    $error_flg["error_email_valid"] = true;
 }
 // pwの長さ(max_length)
 // XXX PASSWORD_BCRYPT だと最大72文字なのでやむを得ず
 if (72 < strlen($data['pw'])) {
-    $error_flg = true;
+    $error_flg["error_pw_to_long"] = true;
 }
 // pwとpw2のチェック
 if ($data['pw'] !== $data['pw2']) {
-    $error_flg = true;
+    $error_flg["error_pw_nomatch"] = true;
 }
 //
-if (true === $error_flg) {
+if ([] !== $error_flg) {
     // 入力ページに戻す
-    $_SESSION['register']['error'] = true;
+    $_SESSION['register']['error'] = $error_flg;
     // password情報を抜いてから渡す
     unset($data['pw']);
     unset($data['pw2']);
@@ -44,9 +44,50 @@ if (true === $error_flg) {
     return ;
 }
 
-// 会員情報のINSERT
-// 完了画面の出力(Location)
+// DBハンドルの取得
+$dbh = DB::getHandle();
 
+// 会員情報のINSERT
+$sql = 'INSERT INTO users(name, email, pw) VALUES(:name, \'\', :pw);';
+$pre = $dbh->prepare($sql);
+//
+$pre->bindValue(':name', $data['name'], \PDO::PARAM_STR);
+$pre->bindValue(':pw', password_hash($data['pw'], PASSWORD_DEFAULT), \PDO::PARAM_STR);
+//
+$res = $pre->execute();
+if (false == $res) {
+    // XXX
+    echo 'INSERT失敗';
+    exit;
+}
+// user_idの取得
+$user_id = $dbh->lastInsertId();
+
+// アクティベーションのINSERT
+$sql = 'INSERT INTO activation(token, user_id, email, ttl)
+               VALUES(:token, :user_id, :email, :ttl);';
+$pre = $dbh->prepare($sql);
+//
+$token = bin2hex(random_bytes(128)); // 実際は32byteくらいでOK
+//
+$pre->bindValue(':token', $token, \PDO::PARAM_STR);
+$pre->bindValue(':user_id', $user_id, \PDO::PARAM_STR); // XXX あえてstringで
+$pre->bindValue(':email', $data['email'], \PDO::PARAM_STR);
+$pre->bindValue(':ttl', date(DATE_ATOM, time() + 10800), \PDO::PARAM_STR); // 3時間
+//
+$res = $pre->execute();
+if (false == $res) {
+    // XXX
+    echo 'INSERT失敗';
+    exit;
+}
+//
+var_dump($user_id, $token);
+
+
+// アクティベーションmailの送信
+
+// 完了画面の出力(Location)
 
 
 
