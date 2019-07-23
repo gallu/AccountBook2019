@@ -84,10 +84,29 @@ if (false == $res) {
 //
 var_dump($user_id, $token);
 
-
 // アクティベーションmailの送信
+$message = new Swift_Message();
+$message->setFrom('test@dev2.m-fr.net');
+$message->setTo( $data['email'] );
+$message->setSubject('AccoutBook アクティベーションメール');
+// bodyの作成
+$param = ['token' => $token, 'name' => $data['name'] ];
+$body = $twig->render('activation_mail.twig', $param);
+var_dump($body);
+//
+$message->setBody($body);
+
+//
+$mailer = new Swift_Mailer(new Swift_SmtpTransport('localhost', 25));
+$r = $mailer->send($message);
 
 // 完了画面の出力(Location)
+header('Location: ./register_success.php');
+
+
+
+
+
 
 
 
