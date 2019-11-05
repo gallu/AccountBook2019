@@ -2,28 +2,22 @@
 
 // 初期処理
 require_once(__DIR__ . '/../Libs/init.php');
+//
+require_once(BASEPATH . '/Model/ActivationModel.php');
+require_once(BASEPATH . '/Model/UsersModel.php');
 
 // DBハンドルの取得
 $dbh = DB::getHandle();
 
 // 先に「TTLが過去の情報」を削除：お掃除
-$sql = 'DELETE FROM activation WHERE ttl < now();';
-$dbh->query($sql); //
+ActivationModel::deletePast();
 
 // tokenの取得
 $token = (string)@$_GET['token'];
 
 // DBにtokenがあるか？ を確認
-$sql = 'SELECT * FROM activation WHERE token = :token;';
-$pre = $dbh->prepare($sql);
-//
-$pre->bindValue(':token', $token, \PDO::PARAM_STR);
-//
-$res = $pre->execute(); // XXX
-$row = $pre->fetch();
-//var_dump($row);
-// tokenがなかったらNG
-if (empty($row)) {
+$activation = ActivationModel::find($token);
+if (empty($activation)) {
     // XXX
     echo 'ないよ～';
     exit;
@@ -31,21 +25,12 @@ if (empty($row)) {
     // tokenがあったら
     // XXX BEGIN
     // 対象のuser_idのemailをupdateして
-    $sql = 'UPDATE users SET email=:email WHERE user_id=:user_id;';
-    $pre = $dbh->prepare($sql);
-    //
-    $pre->bindValue(':email', $row['email'], \PDO::PARAM_STR);
-    $pre->bindValue(':user_id', $row['user_id'], \PDO::PARAM_STR);
-    //
-    $res = $pre->execute(); // XXX
+    $user = UsersModel::find($activation->user_id); // XXX チェックをオミット
+    $user->email = $activation->email;
+    $user->update();
 
     // tokenを削除
-    $sql = 'DELETE FROM activation WHERE token = :token;';
-    $pre = $dbh->prepare($sql);
-    //
-    $pre->bindValue(':token', $token, \PDO::PARAM_STR);
-    //
-    $res = $pre->execute(); // XXX
+    $activation->delete();
     // XXX COMMIT
 
     // XXX

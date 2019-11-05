@@ -3,6 +3,10 @@
 // 初期処理
 require_once(__DIR__ . '/../Libs/init.php');
 
+//
+require_once(BASEPATH . '/Model/UsersModel.php');
+require_once(BASEPATH . '/Model/ActivationModel.php');
+
 // 入力データの取得
 $params = ['name', 'email', 'pw', 'pw2'];
 $data = [];
@@ -48,13 +52,12 @@ if ([] !== $error_flg) {
 $dbh = DB::getHandle();
 
 // 会員情報のINSERT
-$sql = 'INSERT INTO users(name, email, pw) VALUES(:name, \'\', :pw);';
-$pre = $dbh->prepare($sql);
+$user = new UsersModel();
+$user->name = $data['name'];
+$user->email = '';
+$user->pw = password_hash($data['pw'], PASSWORD_DEFAULT);
 //
-$pre->bindValue(':name', $data['name'], \PDO::PARAM_STR);
-$pre->bindValue(':pw', password_hash($data['pw'], PASSWORD_DEFAULT), \PDO::PARAM_STR);
-//
-$res = $pre->execute();
+$res = $user->insert();
 if (false == $res) {
     // XXX
     echo 'INSERT失敗';
@@ -64,18 +67,13 @@ if (false == $res) {
 $user_id = $dbh->lastInsertId();
 
 // アクティベーションのINSERT
-$sql = 'INSERT INTO activation(token, user_id, email, ttl)
-               VALUES(:token, :user_id, :email, :ttl);';
-$pre = $dbh->prepare($sql);
+$activation = new ActivationModel();
+$activation->token = $token = bin2hex(random_bytes(128)); // 実際は32byteくらいでOK
+$activation->user_id = $user_id;
+$activation->email = $data['email'];
+$activation->ttl = date(DATE_ATOM, time() + 10800);
 //
-$token = bin2hex(random_bytes(128)); // 実際は32byteくらいでOK
-//
-$pre->bindValue(':token', $token, \PDO::PARAM_STR);
-$pre->bindValue(':user_id', $user_id, \PDO::PARAM_STR); // XXX あえてstringで
-$pre->bindValue(':email', $data['email'], \PDO::PARAM_STR);
-$pre->bindValue(':ttl', date(DATE_ATOM, time() + 10800), \PDO::PARAM_STR); // 3時間
-//
-$res = $pre->execute();
+$res = $activation->insert();
 if (false == $res) {
     // XXX
     echo 'INSERT失敗';
