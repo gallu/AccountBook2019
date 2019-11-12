@@ -1,0 +1,57 @@
+{# top.twig #}
+
+{# ベースとなるテンプレートを継承する #}
+{% extends "layout_auth.twig" %}
+
+{# 本体 #}
+{% block body_auth %}
+<h1>ログイン後TopPage</h1>
+
+<h2>入出金</h2>
+
+<p>入金しました</p>
+<p>出金しました</p>
+
+<h3>入金</h3>
+<form action="top.html" method="post">
+金額:<input name="amount">
+<button>入金する</button>
+</form>
+
+<h3>出金</h3>
+<form action="top.html" method="post">
+<select>
+  <option>飲食代
+  <option>交通費
+</select><br>
+金額:<input name="amount">
+<button>出金する</button>
+</form>
+
+<h2>出納帳</h2>
+memo:日付は降順で出力。
+<table border="1">
+<tr>
+  <th>日付
+  <th>科目
+  <th>入金
+  <th>出金
+<tr>
+  <td>2019-5-1
+  <td>映画代
+  <td>
+  <td>\1,800
+<tr>
+  <td>2019-5-1
+  <td>飲食
+  <td>
+  <td>\500
+<tr>
+  <td>2019-4-30
+  <td>
+  <td>\50,000
+  <td>
+</table>
+
+{% endblock %}
+
