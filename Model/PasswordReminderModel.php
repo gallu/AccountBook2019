@@ -1,5 +1,7 @@
 <?php  // PasswordReminderModel.php
 
+require_once(BASEPATH . '/Model/ModelBase.php');
+
 class PasswordReminderModel extends ModelBase {
     // テーブル名
     protected static $table = 'password_reminder';

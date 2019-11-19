@@ -1,0 +1,20 @@
+{# reminder_input.twig #}
+
+{# ベースとなるテンプレートを継承する #}
+{% extends "layout.twig" %}
+
+{# 本体 #}
+{% block body %}
+<h1>パスワード再設定</h1>
+
+<form action="./reminder_input_fin.php" method="POST">
+<input type="hidden" name="token" value="{{ token }}">
+パスワード:<input name="pw" type="password"><br>
+再度パスワード:<input name="pw2" type="password"><br>
+<br>
+<button>パスワード再設定</button>
+</form>
+
+{% endblock %}
+
+
