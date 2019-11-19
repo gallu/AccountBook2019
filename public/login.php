@@ -17,6 +17,11 @@ if ( ('' === $email)||('' === $pw) ) {
 // usersテーブルから該当レコードを把握
 $user = UsersModel::findBy(['email' => $email]);
 //var_dump($user); exit;
+if (null === $user) {
+    // 該当ユーザが存在しなかったらつっかえす
+    header('Location: index.php');
+    exit;
+}
 
 // パスワードを比較
 if (false === password_verify($pw, $user->pw)) {

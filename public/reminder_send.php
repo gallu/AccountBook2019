@@ -1,27 +1,36 @@
 <?php // reminder_send.php
 
-// ‰Šúˆ—
+// åˆæœŸå‡¦ç†
 require_once(__DIR__ . '/../Libs/init.php');
+//
+require_once(BASEPATH . '/Libs/Token.php');
 
-/* ˆ— */
-// emailƒAƒhƒŒƒX(“ü—Í)‚Ìæ“¾
+/* å‡¦ç† */
+// emailã‚¢ãƒ‰ãƒ¬ã‚¹(å…¥åŠ›)ã®å–å¾—
 $email = (string)$_POST['email'] ?? '';
 if ('' === $email) {
     header('Location: reminder.php');
     return ;
 }
 
-// user‚ğ’T‚·
+// userã‚’æ¢ã™
+$user = UsersModel::findBy(['email' => $email]);
+//var_dump($user); exit;
 
-// token‚ğì¬‚µ‚ÄDB‚É“ü‚ê‚é
+// ãƒ¦ãƒ¼ã‚¶ãŒè¦‹ã¤ã‹ã£ãŸã‚‰ä»¥ä¸‹ã®å‡¦ç†ã‚’ã™ã‚‹
+if (null !== $user) {
+    // tokenã‚’ä½œæˆã—ã¦DBã«å…¥ã‚Œã‚‹
+    $token = Token::make();
 
-// mail‚ğ‘—‚é
+
+    // mailã‚’é€ã‚‹
+}
 
 //
 $template_file_name = 'reminder_send.twig';
 $template_data = [];
 
-// I—¹ˆ—
+// çµ‚äº†å‡¦ç†
 require_once(BASEPATH . '/Libs/fin.php');
 
 

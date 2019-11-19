@@ -6,6 +6,7 @@ require_once(__DIR__ . '/../Libs/init.php');
 //
 require_once(BASEPATH . '/Model/UsersModel.php');
 require_once(BASEPATH . '/Model/ActivationModel.php');
+require_once(BASEPATH . '/Libs/Token.php');
 
 // 入力データの取得
 $params = ['name', 'email', 'pw', 'pw2'];
@@ -68,7 +69,7 @@ $user_id = $dbh->lastInsertId();
 
 // アクティベーションのINSERT
 $activation = new ActivationModel();
-$activation->token = $token = bin2hex(random_bytes(128)); // 実際は32byteくらいでOK
+$activation->token = $token = Token::make();
 $activation->user_id = $user_id;
 $activation->email = $data['email'];
 $activation->ttl = date(DATE_ATOM, time() + 10800);
