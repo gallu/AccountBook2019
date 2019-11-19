@@ -17,6 +17,15 @@ CREATE TABLE activation (
   PRIMARY KEY(token)
 )CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='emailアクティベーション';
 
+-- パスワードリマインダ用
+CREATE TABLE password_reminder (
+  token VARBINARY(512) NOT NULL COMMENT 'パスワード変更用アクセストークン',
+  user_id BIGINT UNSIGNED NOT NULL COMMENT 'ユーザID',
+  ttl DATETIME NOT NULL COMMENT '有効期限',
+  CONSTRAINT password_reminder_fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
+  PRIMARY KEY(token)
+)CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='パスワード変更用アクセストークン';
+
 
 
 出納帳テーブル：１レコードが「１枚の伝票の１行」を意味する

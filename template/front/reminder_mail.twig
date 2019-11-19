@@ -1,0 +1,13 @@
+{#  reminder_mail.twig  #}
+
+(パターン1：よりセキュア)
+以下のtokenを画面に入力して、パスワードを再設定してください。
+{{ token }}
+
+(パターン2：より便利)
+以下のURLをクリックして、パスワードを再設定してください。
+http://dev2.m-fr.net/furu/AccountBook/reminder_input.php?token={{ token }}
+
+有効期限
+{{ ttl }}
+
