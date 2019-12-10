@@ -35,10 +35,3 @@ $_SESSION['flash']['withdrawal_success'] = true;
 // TopにLocation
 header('Location: ./top.php');
 
-
-
-
-
-
-
-
