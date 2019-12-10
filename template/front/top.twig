@@ -9,10 +9,12 @@
 
 <h2>入出金</h2>
 
-{#
+{% if deposit_success == true %}
 <p>入金しました</p>
+{% endif %}
+{% if withdrawal_success == true %}
 <p>出金しました</p>
-#}
+{% endif %}
 
 <h3>入金</h3>
 <form action="./deposit.php" method="post">
@@ -22,7 +24,7 @@
 
 <h3>出金</h3>
 <form action="./withdrawal.php" method="post">
-<select>
+<select name="account_title">
   <option>飲食代
   <option>交通費
 </select><br>

@@ -26,15 +26,31 @@ CREATE TABLE password_reminder (
   PRIMARY KEY(token)
 )CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='パスワード変更用アクセストークン';
 
+-- 出納帳
+CREATE TABLE account_book (
+  account_book_id SERIAL COMMENT 'ID',
+  user_id BIGINT UNSIGNED NOT NULL COMMENT 'ユーザID',
+  deposit_amount INT UNSIGNED DEFAULT 0 COMMENT '入金額',
+  withdrawal_amount INT UNSIGNED DEFAULT 0 COMMENT '出金額',
+  withdrawal_account_title VARCHAR(64) DEFAULT '' COMMENT '出金勘定科目',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '入力日付: XXX型を後でDATETIMEに変える',
+  CONSTRAINT account_book_fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
+  PRIMARY KEY(account_book_id)
+)CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='出納帳';
 
 
-出納帳テーブル：１レコードが「１枚の伝票の１行」を意味する
-	日付
-fk	科目ID
-	入金
-	出金
 
-科目テーブル：１レコードが「１つの科目」を意味する
-pk	科目ID
-	科目名称
+
+
+
+
+
+
+
+
+
+
+
+
+
 

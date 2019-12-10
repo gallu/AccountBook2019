@@ -1,4 +1,4 @@
-<?php  // deposit.php
+<?php  // withdrawal.php
 
 // 初期処理 + 認可チェック
 require_once(__DIR__ . '/../Libs/init_auth.php');
@@ -12,18 +12,25 @@ if (0 >= $amount) {
     echo '有効な金額を入れろ！';
     exit;
 }
-//var_dump($amount, $_SESSION);
+$account_title = (string)($_POST['account_title'] ?? '');
+if ('' === $account_title) {
+    // XXX
+    echo '有効な科目を入れろ！';
+    exit;
+}
+//var_dump($amount, $account_title); exit;
 
-// 入金(insert)
+// 出金(insert)
 $obj = new AccountBookModel();
-$obj->deposit_amount = $amount;
+$obj->withdrawal_amount = $amount;
+$obj->withdrawal_account_title = $account_title;
 $obj->user_id = $_SESSION['auth']['user_id'];
 //var_dump($obj); exit;
 $r = $obj->insert();
 //var_dump($r);
 
-// 「入金しました」表示用ギミック
-$_SESSION['flash']['deposit_success'] = true;
+// 「出金しました」表示用ギミック
+$_SESSION['flash']['withdrawal_success'] = true;
 
 // TopにLocation
 header('Location: ./top.php');
