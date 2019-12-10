@@ -9,17 +9,19 @@
 
 <h2>入出金</h2>
 
+{#
 <p>入金しました</p>
 <p>出金しました</p>
+#}
 
 <h3>入金</h3>
-<form action="top.html" method="post">
+<form action="./deposit.php" method="post">
 金額:<input name="amount">
 <button>入金する</button>
 </form>
 
 <h3>出金</h3>
-<form action="top.html" method="post">
+<form action="./withdrawal.php" method="post">
 <select>
   <option>飲食代
   <option>交通費
@@ -30,6 +32,7 @@
 
 <h2>出納帳</h2>
 memo:日付は降順で出力。
+{#
 <table border="1">
 <tr>
   <th>日付
@@ -52,6 +55,7 @@ memo:日付は降順で出力。
   <td>\50,000
   <td>
 </table>
+#}
 
 {% endblock %}
 

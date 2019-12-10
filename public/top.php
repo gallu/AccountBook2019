@@ -1,17 +1,12 @@
 <?php  // top.php
 
-// ‰Šúˆ—
-require_once(__DIR__ . '/../Libs/init.php');
-// ”F‰Âƒ`ƒFƒbƒN
-if (false === isset($_SESSION['auth'])) {
-     header('Location: index.php');
-     return;
-}
+// åˆæœŸå‡¦ç† + èªå¯ãƒã‚§ãƒƒã‚¯
+require_once(__DIR__ . '/../Libs/init_auth.php');
 
 //
 $template_file_name = 'top.twig';
 $template_data = [];
 
-// I—¹ˆ—
+// çµ‚äº†å‡¦ç†
 require_once(BASEPATH . '/Libs/fin.php');
 

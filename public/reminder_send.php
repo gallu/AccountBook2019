@@ -9,7 +9,7 @@ require_once(BASEPATH . '/Model/PasswordReminderModel.php');
 
 /* 処理 */
 // emailアドレス(入力)の取得
-$email = (string)$_POST['email'] ?? '';
+$email = (string)($_POST['email'] ?? '');
 if ('' === $email) {
     header('Location: reminder.php');
     return ;

@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../Libs/init.php');
 require_once(BASEPATH . '/Model/PasswordReminderModel.php');
 
 // tokenを把握
-$token = trim((string)$_GET['token'] ?? '');
+$token = trim((string)($_GET['token'] ?? ''));
 //var_dump($token);
 
 // tokenの有効性チェック
