@@ -34,30 +34,24 @@
 
 <h2>出納帳</h2>
 memo:日付は降順で出力。
-{#
 <table border="1">
 <tr>
   <th>日付
   <th>科目
   <th>入金
   <th>出金
+{% for datum in list %}
 <tr>
-  <td>2019-5-1
-  <td>映画代
-  <td>
-  <td>\1,800
-<tr>
-  <td>2019-5-1
-  <td>飲食
-  <td>
-  <td>\500
-<tr>
-  <td>2019-4-30
-  <td>
-  <td>\50,000
-  <td>
+  <td>{{ datum.created_at | date("Y-m-d") }}
+  <td>{{ datum.withdrawal_account_title }}
+  <td>{% if datum.deposit_amount != 0 %}
+          {{ datum.deposit_amount }}
+      {% endif %}
+  <td>{% if datum.withdrawal_amount != 0 %}
+          {{ datum.withdrawal_amount }}
+      {% endif %}
+{% endfor %}
 </table>
-#}
 
 {% endblock %}
 
